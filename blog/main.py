@@ -7,7 +7,7 @@ from starlette import status
 from . import hashing
 from .database import Base, engine, SessionLocal
 from .models import BlogModel, UserModel
-from .schemas import Blog, User, UserResponse
+from .schemas import Blog, User, UserResponse, BlogResponse
 
 app = FastAPI()
 
@@ -22,7 +22,7 @@ def get_db():
         db.close()
 
 
-@app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["blogs"])
+@app.post("/blog", response_model=BlogResponse, status_code=status.HTTP_201_CREATED, tags=["blogs"])
 def create(request: Blog, db: Session = Depends(get_db)):
     new_blog = BlogModel(**request.dict())
     db.add(new_blog)
@@ -32,7 +32,7 @@ def create(request: Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get("/blog", response_model=List[Blog], tags=["blogs"])
+@app.get("/blog", response_model=List[BlogResponse], tags=["blogs"])
 def create(db: Session = Depends(get_db)):
     blogs = db.query(BlogModel).all()
 
