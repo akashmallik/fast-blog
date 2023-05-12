@@ -1,4 +1,4 @@
-# Install required packages
+### Install required packages
 ```shell
 pip install -r requirements.txt
 pip install -r requirements_dev.txt
@@ -9,7 +9,7 @@ make install
 make install-dev
 ```
 
-# Run server locally
+### Run server locally
 ```shell
 uvicorn blog.main:app --reload
 ```
