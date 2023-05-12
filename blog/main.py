@@ -22,7 +22,7 @@ def get_db():
         db.close()
 
 
-@app.post("/blog", status_code=status.HTTP_201_CREATED)
+@app.post("/blog", status_code=status.HTTP_201_CREATED, tags=["blogs"])
 def create(request: Blog, db: Session = Depends(get_db)):
     new_blog = BlogModel(**request.dict())
     db.add(new_blog)
@@ -32,14 +32,14 @@ def create(request: Blog, db: Session = Depends(get_db)):
     return new_blog
 
 
-@app.get("/blog", response_model=List[Blog])
+@app.get("/blog", response_model=List[Blog], tags=["blogs"])
 def create(db: Session = Depends(get_db)):
     blogs = db.query(BlogModel).all()
 
     return blogs
 
 
-@app.get("/blog/{id}", response_model=Blog)
+@app.get("/blog/{id}", response_model=Blog, tags=["blogs"])
 def create(id: int, response: Response, db: Session = Depends(get_db)):
     blog = db.query(BlogModel).filter(BlogModel.id == id).first()
     if not blog:
@@ -51,7 +51,7 @@ def create(id: int, response: Response, db: Session = Depends(get_db)):
     return blog
 
 
-@app.delete("/blog/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/blog/{id}", status_code=status.HTTP_204_NO_CONTENT, tags=["blogs"])
 def destroy(id: int, db: Session = Depends(get_db)):
     blog = db.query(BlogModel).filter(BlogModel.id == id)
     if not blog.first():
@@ -62,7 +62,7 @@ def destroy(id: int, db: Session = Depends(get_db)):
     return None
 
 
-@app.put("/blog/{id}", status_code=status.HTTP_202_ACCEPTED)
+@app.put("/blog/{id}", status_code=status.HTTP_202_ACCEPTED, tags=["blogs"])
 def update(id: int, request: Blog, db: Session = Depends(get_db)):
     blog = db.query(BlogModel).filter(BlogModel.id == id)
     if not blog.first():
@@ -73,7 +73,7 @@ def update(id: int, request: Blog, db: Session = Depends(get_db)):
     return "updated successfully"
 
 
-@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
+@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=UserResponse, tags=["users"])
 def create_user(request: User, db: Session = Depends(get_db)):
     hashed_password = hashing.bcrypt(request.password)
     user_data = request.dict()
@@ -86,7 +86,7 @@ def create_user(request: User, db: Session = Depends(get_db)):
     return new_user
 
 
-@app.get("/user/{id}", response_model=UserResponse)
+@app.get("/user/{id}", response_model=UserResponse, tags=["users"])
 def get_user(id: str, db: Session = Depends(get_db)):
     user = db.query(UserModel).filter(UserModel.id == id).first()
 
